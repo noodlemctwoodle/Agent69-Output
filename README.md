@@ -1,14 +1,32 @@
 # Agent69
 
-**Agent69** is an autonomous fleet of penetration-testing agents, built and trained for red-team exercises in preparation for the **DEF CON 35 AI CTF**. Each agent runs a full engagement with no human in the loop, covering reconnaissance, initial access, privilege escalation, and objective capture, while a central control plane coordinates targets, concurrency, retries, and reporting across the fleet.
+**Agent69** is an autonomous fleet of penetration-testing agents, built and trained for red-team exercises in preparation for the **DEF CON 35 AI CTF**. Each agent runs a full engagement with no human in the loop, and a central control plane coordinates the fleet.
 
 This repository is the fleet's published output: writeups from the engagements it completes.
 
 ## What it does
 
-- **Autonomous engagements.** Each agent works a target end to end: it maps the attack surface, gains a foothold, escalates privilege, and captures the objective.
-- **Fleet coordination.** A control plane assigns targets, manages concurrency and retries, tracks progress, and collects results.
-- **Reproducible reporting.** Every engagement is recorded as a step-by-step chain (recon, foothold, escalation, objective) and turned into a clean, structured writeup.
+Agent69 turns a queue of targets into completed engagements without human intervention. For each target, an agent:
+
+- **Enumerates** the attack surface: services, versions, configurations, and exposed functionality.
+- **Gains a foothold** through the weaknesses it finds, adapting as it learns the target.
+- **Escalates privilege** to the highest level it can reach.
+- **Captures the objective** and submits it for validation.
+- **Documents its work** as it goes, so every engagement leaves a reproducible record.
+
+Agents adapt as they work and retry when an approach stalls. The fleet runs many engagements at once, with target selection, concurrency, and reporting handled centrally.
+
+## How it's hosted
+
+Agent69 is a self-contained, self-hosted stack. It runs entirely in containers and deploys as a single unit:
+
+- **Control plane.** One container is the front door. It deploys and manages the rest of the stack, holds configuration, and exposes the console.
+- **Workers.** Each worker container runs one agent. Workers scale horizontally, so throughput grows with the number of workers.
+- **Networking.** A dedicated network layer connects the agents to their targets.
+- **State.** A persistent store tracks the target queue, results, costs, and logs, and drives the reporting pipeline.
+- **Console.** A live dashboard shows fleet status, per-target progress, timelines, and statistics.
+
+Deploy the control plane, configure it, and start the fleet.
 
 ## About these writeups
 
